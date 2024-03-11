@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\ROMAN\Repositories\GoIt-Core-002"
+VIRTUAL_ENV="C:\Users\ROMAN\Repositories\Final_project_Core"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -55,9 +55,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1="(GoIt-Core-002) ${PS1:-}"
+    PS1="(Final_project_Core) ${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT="(GoIt-Core-002) "
+    VIRTUAL_ENV_PROMPT="(Final_project_Core) "
     export VIRTUAL_ENV_PROMPT
 fi
 
