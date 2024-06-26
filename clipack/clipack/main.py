@@ -8,7 +8,7 @@ init(autoreset=True)
 phone_book = AddressBook()
 notebook = NoteBook()
 
-instruction = ("Hello, I am a bot assistant for work with the phone book. \n"
+INSTRUCTION = ("Hello, I am a bot assistant for work with the phone book. \n"
                "Enter the command:\n"
                "'show all' - if you want to view the entire phone book.\n"
                "'exit', 'close' or 'good bye' - if you want to finish the work.\n"
@@ -474,7 +474,7 @@ def final():
 
 
 def greeting():
-    return Fore.YELLOW + instruction
+    return Fore.YELLOW + INSTRUCTION
 
 
 command_dict1 = {"good bye": final, "close": final, "exit": final, "hello": greeting, "show all": show_all, 'add_note': add_note, 'edit_note': edit_note, 'add_note_tags': add_note_tags,
