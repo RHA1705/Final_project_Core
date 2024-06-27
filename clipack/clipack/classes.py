@@ -235,11 +235,11 @@ class Record:
     def edit_address(self, new_address):
         self.address = Address(new_address)
         return self.address
-    
+
     def remove_address(self):
         self.address = Address(None)
         return self.address
-    
+
     def find_address(self, address):
         if self.address == address:
             return self.name.value
