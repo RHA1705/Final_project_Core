@@ -1,12 +1,14 @@
-from clipack.classes import Record, AddressBook
+from clipack.classes import Record, AddressBook, CLIHandler
 from colorama import *
 from clipack.file_sorter import FileSorter
 from clipack.notebook import NoteBook
+
 
 init(autoreset=True)
 
 phone_book = AddressBook()
 notebook = NoteBook()
+handler = CLIHandler()
 
 INSTRUCTION = ("Hello, I am a bot assistant for work with the phone book. \n"
                "Enter the command:\n"
@@ -226,7 +228,7 @@ def show(contact):
         page = phone_book.iterator(n)
         for elem in page:
             if elem:
-                print(elem)
+                handler.send(elem)
 
 @input_error
 def add_birthday(contact):
@@ -404,69 +406,69 @@ def file_sort(contact):
 
 
 def add_note():
-    title = input("Enter note title: ")
-    text = input("Enter note text: ")
-    tags = input("Enter note tags: ")
+    title = handler.receive("Enter note title: ")
+    text = handler.receive("Enter note text: ")
+    tags = handler.receive("Enter note tags: ")
     notebook.add_note(title, text, tags)
     return f"Note {title} added successfully"
 
 
 def edit_note():
-    index = int(input("Enter index of the note you want to edit: "))
-    new_title = input("Enter new title: ")
-    new_text = input("Enter new text: ")
-    new_tags = input("Enter new tags: ")
+    index = int(handler.receive("Enter index of the note you want to edit: "))
+    new_title = handler.receive("Enter new title: ")
+    new_text = handler.receive("Enter new text: ")
+    new_tags = handler.receive("Enter new tags: ")
     notebook.edit_note(index, new_title, new_text, new_tags)
     return "Note edited successfully"
 
 
 def delete_note_by_index():
-    index = int(input("Enter index of the note you want to delete: "))
+    index = int(handler.receive("Enter index of the note you want to delete: "))
     notebook.delete_note_by_index(index)
     return "Note deleted successfully"
 
 
 def delete_note_by_title():
-    title = input("Enter title of the note you want to delete: ")
+    title = handler.receive("Enter title of the note you want to delete: ")
     notebook.delete_note_by_title(title)
     return "Note deleted successfully"
 
 
 def add_note_tags():
-    index = int(input("Enter index of the note you want to add tag: "))
-    tags = input("Enter tags to add: ")
+    index = int(handler.receive("Enter index of the note you want to add tag: "))
+    tags = handler.receive("Enter tags to add: ")
     notebook.add_note_tags(index, tags)
     return "Tag added successfully"
 
 
 def search_note_by_tag():
-    tag = input("Enter tag to search notes: ")
+    tag = handler.receive("Enter tag to search notes: ")
     search_results = notebook.search_by_tag(tag)
-    print("Search results:")
+    handler.send("Search results:")
     for note in search_results:
-        print(note)
+        handler.send(note)
 
 
 def sort_notes_by_tag():
     sorted_notes = notebook.sort_notes_by_tag()
-    print("Sorted notes:")
+    handler.send("Sorted notes:")
     for note in sorted_notes:
-        print(note)
+        handler.send(note)
 
 
 def notes_show_all():
     all_notes = notebook.show_all()
-    print("All notes:")
+    handler.send("All notes:")
     for index, note in enumerate(all_notes):
-        print(index, note)
+        handler.send(index, note)
 
 
 def search_note_by():
-    qwerty = input("Enter what u want to search for: ")
+    qwerty = handler.receive("Enter what u want to search for: ")
     result = notebook.search_full(qwerty)
-    print("Search results:")
+    handler.send("Search results:")
     for note in result:
-        print(note)
+        handler.send(note)
 
 
 def final():
@@ -477,7 +479,7 @@ def greeting():
     return Fore.YELLOW + INSTRUCTION
 
 
-command_dict1 = {"good bye": final, "close": final, "exit": final, "hello": greeting, "show all": show_all, 'add_note': add_note, 'edit_note': edit_note, 'add_note_tags': add_note_tags,
+command_dict1 = {"good bye": final, "close": final, "exit": final, "hello": greeting, "help": greeting, "show all": show_all, 'add_note': add_note, 'edit_note': edit_note, 'add_note_tags': add_note_tags,
                 'delete_note_by_idx': delete_note_by_index, 'delete_note_by_title': delete_note_by_title,
                 'search_note_by_tag': search_note_by_tag, 'sort_notes_by_tag': sort_notes_by_tag,
                 'search_note_by': search_note_by, 'notes_show_all': notes_show_all}
@@ -509,12 +511,12 @@ def main():
     notebook = NoteBook()
     notebook.read_from_file()
     while True:
-        command = input().lower().strip()
+        command = handler.receive(">>> ").lower().strip()
 
         if command in command_dict1:
             result = get_handler1(command)()
             if result is not None:
-                print(result)
+                handler.send(result)
             if result == "Good bye!":
                 phone_book.save_to_file(filename='phone_book.bin')
                 notebook.save_to_file()
@@ -526,13 +528,13 @@ def main():
             if command[0] in command_dict2 and contact:
                 result = get_handler2(command[0])(contact)
                 if result is not None:
-                    print(result)
+                    handler.send(result)
             elif command[0] in command_dict2 and not contact:
                 result = get_handler2(command[0])(contact)
                 if result is not None:
-                    print(result)
+                    handler.send(result)
             else:
-                print("This is an incorrect command. Try again, please")
+                handler.send("This is an incorrect command. Try again, please")
 
 
 if __name__ == "__main__":

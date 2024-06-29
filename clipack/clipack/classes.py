@@ -5,7 +5,27 @@ import pickle
 import re
 
 
-class Field(ABC):
+class ABCHandler(ABC):
+    @abstractmethod
+    def receive(self, prompt: str):
+        pass
+
+    @abstractmethod
+    def send(self, data:str):
+        pass
+class CLIHandler(ABCHandler):
+    def receive(self, prompt:str):
+        data = input(prompt)
+        return data
+
+    def send(self, data:str):
+        print(data)
+class ABCField(ABC):
+    @abstractmethod
+    def is_valid(value):
+        pass
+
+class Field(ABCField):
     def __init__(self, value):
         self.__value = None
         self.value = value
@@ -14,10 +34,6 @@ class Field(ABC):
     def value(self):
         return self.__value
 
-    @staticmethod
-    def is_valid(value):
-        if value:
-            return True
 
     @value.setter
     def value(self, value):
@@ -28,6 +44,10 @@ class Field(ABC):
     def __str__(self):
         return str(self.value)
 
+    @staticmethod
+    def is_valid(value):
+        if value:
+            return True
 
 class FirstName(Field):
     def __init__(self, value):
